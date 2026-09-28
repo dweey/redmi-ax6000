@@ -73,6 +73,13 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
+    - name: Cache Toolchain
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: true
+        mixkey: mediatek_filogic
+        prefix: openwrt
+
     - name: Update feeds
       run: |
           cd openwrt && ./scripts/feeds update -a 
@@ -112,8 +119,8 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
 
-    - name: Start SSH via tmate
-      uses: P3TERX/ssh2actions@main
+#    - name: Start SSH via tmate
+#      uses: P3TERX/ssh2actions@main
 
     
 
