@@ -37,3 +37,14 @@
 - `.config`：软件包选配（编译时 `make defconfig` 会自动补全依赖）
 - `diy-part2.sh`：默认 IP / 主机名等修改
 - workflow 已预置 **OpenList**、**Tailscale** 的源码拉取步骤，在 `.config` 中加入对应 `CONFIG_PACKAGE_luci-app-openlist=y`、`CONFIG_PACKAGE_luci-app-tailscale=y` 即可启用
+
+## 构建注意点（踩坑记录）
+
+1. **tmate SSH 调试步骤必须保持注释**：workflow 中的 `Start SSH via tmate` 会原地死等人工 SSH 连接，没人连接就挂到 6 小时被强制取消（编译根本不会开始）。仅排查编译报错时临时放开。
+2. **GitHub 免费单任务上限 6 小时**：无法调大。本 workflow 已开启工具链缓存（cachewrtbuild）+ ccache，首次全量编译较慢，之后命中缓存约 2 小时内完成。若首次超时不要慌，缓存已落盘，**直接再触发一次**即可。
+3. **只编译一个设备**：`.config` 已精简为仅 `xiaomi_redmi-router-ax6000-ubootmod`。多设备一起编会显著增加编译时间，没必要不要加回来。
+4. **Release 权限**：workflow 使用内置 `GITHUB_TOKEN` 并已声明 `permissions: contents: write`，fork 后**无需**手动配置任何 Secret（原仓库的 `GITHUBB_TOKEN` 不会随 fork 继承，已弃用）。
+5. **取固件的另一条路**：即使 Release 发布失败，固件也总能在 Actions 运行页面底部的 **Artifacts**（`OpenWrt_firmware_xxx.zip`）下载到。
+6. **日志中的无害警告**：`WARNING: Applying padding ... usign SHA-512 bug` 为 ImmortalWrt 已知问题，不影响产物，忽略即可。
+7. **安装第三方包/二进制的架构选择**：红米 AX6000（MT7986，4× Cortex-A53）是 **64 位 ARM**，选 `aarch64` / `arm64`（OpenWrt 包架构为 `aarch64_cortex-a53`）；**不要选 ARMv7（32 位）**。
+
