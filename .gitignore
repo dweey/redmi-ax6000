@@ -1,0 +1,10 @@
+# WorkBuddy 项目数据（本地记忆 / 技能 / 临时解包文件），勿提交
+.workbuddy/
+
+# 系统垃圾文件
+Thumbs.db
+Desktop.ini
+
+# 本地编辑器/工具
+.vscode/
+.idea/

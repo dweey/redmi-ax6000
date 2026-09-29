@@ -11,7 +11,8 @@
 #
 
 # Modify default IP (192.168.31.1)
-sed -i 's/192.168.1.1/192.168.31.1/g' package/base-files/files/bin/config_generate
+# 注意：padavanonly 源树默认 IP 为 192.168.6.1（非标准 192.168.1.1），需替换实际字符串
+sed -i 's/192\.168\.6\.1/192.168.31.1/g; s/192\.168\.110\.1/192.168.31.1/g' package/base-files/files/bin/config_generate
 
 # Modify default theme
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
